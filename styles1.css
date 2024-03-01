@@ -1,0 +1,88 @@
+/* Base styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif; /* Modern, clean font */
+    background-color: #f0f0f0; /* Light background for minimalism */
+    color: #333; /* Dark text for contrast and readability */
+}
+
+/* Ensures the content looks good on mobile */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-group label {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        width: 90%;
+    }
+
+    .input-group button#startButton {
+        width: 100%;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+}
+
+/* Timer container with responsive design */
+.timer-container {
+    text-align: center;
+    height: calc(100% - 60px); /* Adjust height, considering banner ad */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20px; /* Padding for smaller screens */
+}
+
+/* Styling for the timer display */
+.timer-display {
+    font-size: 4em; /* Large, readable font size */
+    margin: 20px 0;
+    background-color: #ffffff; /* White background for focus */
+    color: #333; /* Dark text for contrast */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners for modern look */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Input group styling */
+.input-group {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.input-group label {
+    margin-right: 10px; /* Space between label and input */
+}
+
+.input-group input {
+    padding: 10px;
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Buttons styling */
+.button-group button {
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+}
+
+.button-group button:not(:last-child) {
+    margin-right: 10px; /* Space between buttons in the group */
+}
+
+/* Banner ad styling with margin-top to create space after timer display section*/
+.banner-ad {
+    width: 100%;
+    height: 60px; /* Height of banner ad */
+}

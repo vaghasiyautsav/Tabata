@@ -18,11 +18,11 @@ body, html {
 /* Timer container with responsive design */
 .timer-container {
     text-align: center;
-    height: calc(100% - 60px); /* Adjust height, considering banner ad */
+    /* height: calc(100% - 60px); Adjust height, considering banner ad */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 20px; /* Padding for smaller screens */
+    padding: 10px 10px; /* Padding for smaller screens */
 }
 
 /* Styling for the timer display */
