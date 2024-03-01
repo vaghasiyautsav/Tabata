@@ -1,108 +1,90 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPhaseLabel = document.getElementById('current-phase');
-    const timerDisplay = document.getElementById('timer-display');
-    const startButton = document.getElementById('start-button');
-    const stopButton = document.getElementById('stop-button');
-    const resetButton = document.getElementById('reset-button');
-    const prepareDurationInput = document.getElementById('prepare-duration');
-    const restDurationInput = document.getElementById('rest-duration');
-    const workDurationInput = document.getElementById('work-duration');
-    const cyclesInput = document.getElementById('cycles');
-    const tabatasInput = document.getElementById('tabatas');
+let currentPhase = 'prepare';
+  let timer;
+  let totalTime;
+  let prepareTime, workTime, restTime, cycles, tabatas;
 
-    let currentSeconds = 0;
-    let intervalId = null;
-    let currentCycle = 0;
-    let currentTabata = 0;
-    let isWorkPhase = false;
+  function startTimer() {
+    if (!timer) {
+      prepareTime = parseInt(document.getElementById('prepareTime').value);
+      workTime = parseInt(document.getElementById('workTime').value);
+      restTime = parseInt(document.getElementById('restTime').value);
+      cycles = parseInt(document.getElementById('cycles').value);
+      tabatas = parseInt(document.getElementById('tabatas').value);
+      totalTime = prepareTime;
+      currentPhase = 'prepare';
+      document.body.style.backgroundColor = 'lightgreen';
 
-    // Audio element for beep sound
-    const beepAudio = new Audio('beep.mp3'); // Replace 'beep.mp3' with the actual audio file path
-
-    function updateTimerDisplay() {
-        const minutes = Math.floor(currentSeconds / 60);
-        const seconds = currentSeconds % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      timer = setInterval(timerFunction, 1000);
     }
+  }
 
-    function decrementTimer() {
-        if (currentSeconds > 0) {
-            currentSeconds--;
-            updateTimerDisplay();
-        } else {
-            // Play beep sound on important task changes (start, rest, work)
-            if (isWorkPhase && currentSeconds === 0) {
-                beepAudio.play();
-            }
-
-            if (currentSeconds === 0 && currentCycle === cyclesInput.value - 1 && currentTabata === tabatasInput.value - 1) {
-                // All cycles and tabatas completed, stop timer
-                clearInterval(intervalId);
-                intervalId = null;
-                startButton.disabled = false;
-                stopButton.disabled = true;
-                resetButton.disabled = false;
-            } else if (currentSeconds === 0) {
-                // Switch to next phase/cycle/tabata
-                if (isWorkPhase) {
-                    currentPhaseLabel.textContent = 'Rest'; // Update current phase label
-                    currentSeconds = restDurationInput.value;
-                    isWorkPhase = false;
-                    document.body.style.backgroundColor = '#0099cc'; // Change background color for rest
-                } else {
-                    if (currentCycle === cyclesInput.value - 1) {
-                        currentTabata++;
-                        currentCycle = 0;
-                    } else {
-                        currentCycle++;
-                    }
-                    currentPhaseLabel.textContent = 'Work'; // Update current phase label
-                    currentSeconds = workDurationInput.value;
-                    isWorkPhase = true;
-                    document.body.style.backgroundColor = '#ff4444'; // Change background color for work
-                    beepAudio.play(); // Play beep sound for work start
-                }
-            }
-        }
+  function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+      sound.play();
     }
+  }
 
-    function startTimer() {
-        if (!intervalId) {
-            currentSeconds = prepareDurationInput.value;
-            currentPhaseLabel.textContent = 'Prepare'; // Update current phase label
-            isWorkPhase = false;
-            document.body.style.backgroundColor = '#66ff99'; // Change background color for prepare
-            intervalId = setInterval(decrementTimer, 1000);
-            startButton.disabled = true;
-            stopButton.disabled = false;
-            resetButton.disabled = true;
-        }
+  function timerFunction() {
+    if (totalTime <= 0) {
+      playSound('beepSound');
+      switch (currentPhase) {
+        case 'prepare':
+          totalTime = workTime;
+          currentPhase = 'work';
+          document.body.style.backgroundColor = 'red';
+          playSound('workSound');
+          break;
+        case 'work':
+          totalTime = restTime;
+          currentPhase = 'rest';
+          document.body.style.backgroundColor = 'lightblue';
+          playSound('restSound');
+          break;
+        case 'rest':
+          if (cycles > 1) {
+            totalTime = workTime;
+            currentPhase = 'work';
+            document.body.style.backgroundColor = 'red';
+            cycles--;
+          } else if (tabatas > 1) {
+            totalTime = prepareTime;
+            currentPhase = 'prepare';
+            document.body.style.backgroundColor = 'lightgreen';
+            tabatas--;
+            cycles = parseInt(document.getElementById('cycles').value);
+          } else {
+            clearInterval(timer);
+            timer = null;
+            document.body.style.backgroundColor = '';
+          }
+          break;
+      }
     }
+    updateDisplay(totalTime);
+    totalTime--;
+  }
 
-    function stopTimer() {
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-            startButton.disabled = false;
-            stopButton.disabled = true;
-        }
-    }
+  function stopTimer() {
+    clearInterval(timer);
+    timer = null;
+  }
 
-    function resetTimer() {
-        clearInterval(intervalId);
-        intervalId = null;
-        currentSeconds = 0;
-        currentCycle = 0;
-        currentTabata = 0;
-        isWorkPhase = false;
-        updateTimerDisplay();
-        startButton.disabled = false;
-        stopButton.disabled = true;
-        resetButton.disabled = false;
-        document.body.style.backgroundColor = '#f5f5f5'; // Reset background color
-    }
+  function resetTimer() {
+    stopTimer();
+    document.getElementById('prepareTime').value = 10;
+    document.getElementById('workTime').value = 20;
+    document.getElementById('restTime').value = 10;
+    document.getElementById('cycles').value = 8;
+    document.getElementById('tabatas').value = 1;
+    document.getElementById('timerDisplay').textContent = '00:00';
+    document.body.style.backgroundColor = '';
+  }
 
-    startButton.addEventListener('click', startTimer);
-    stopButton.addEventListener('click', stopTimer);
-    resetButton.addEventListener('click', resetTimer);
-});
+  function updateDisplay(time) {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    document.getElementById('timerDisplay').textContent = minutes + ':' + seconds;
+  }
