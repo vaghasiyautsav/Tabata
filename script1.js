@@ -3,6 +3,7 @@ let timer;
 let totalTime;
 let prepareTime, workTime, restTime, cycles, tabatas;
 let isPaused = false;
+let isFinished = false;
 
 function startResumeTimer() {
   if (!timer) {
@@ -47,11 +48,13 @@ function resetTimer() {
 }
 
 function updateDisplay(time) {
-  let minutes = Math.floor(time / 60);
-  let seconds = time % 60;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  seconds = seconds < 10 ? '0' + seconds : seconds;
-  document.getElementById('timerDisplay').textContent = minutes + ':' + seconds;
+  if (!isFinished) {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    document.getElementById('timerDisplay').textContent = minutes + ':' + seconds;
+  }
 }
 
 function timerFunction() {
@@ -86,6 +89,8 @@ function timerFunction() {
           clearInterval(timer);
           timer = null;
           document.body.style.backgroundColor = '';
+          isFinished = true;
+          document.getElementById('timerDisplay').textContent = 'Hurray, You Finished ' + document.getElementById('tabatas').value + ' tabatas!';
         }
         break;
     }
