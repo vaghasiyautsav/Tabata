@@ -10,7 +10,7 @@ body, html {
 /* Ensures the content looks good on mobile */
 @media (max-width: 768px) {
     .input-group input, .input-group button {
-        width: 90%;
+        width: 20%;
         margin: 5px 0; /* Adjust spacing for smaller screens */
     }
 }
@@ -22,7 +22,7 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px 10px; /* Padding for smaller screens */
+    padding: 1px 1px; /* Padding for smaller screens */
 }
 
 /* Styling for the timer display */
@@ -62,7 +62,8 @@ body, html {
     background-color: #007bff; /* Bootstrap blue for consistency */
     color: white; /* White text */
     cursor: pointer; /* Pointer cursor on hover */
-    border: none; /* Remove default border */
+    border: none;
+    border-radius: 100px; /* Remove default border */
 }
 
 .input-group button:hover {

@@ -30,9 +30,12 @@
         <label>Tabatas: <input type="number" id="tabatas" value="1" /></label>
       </div>
       <div class="input-group">
-        <button onclick="startTimer()">Start Timer</button>
-        <button onclick="stopTimer()">Stop Timer</button>
-        <button onclick="resetTimer()">Reset Timer</button>
+        <button id="startResumeButton" onclick="startResumeTimer()">
+          Start/Resume
+        </button>
+        <button id="stopButton" onclick="stopTimer()">Stop Timer</button>
+        <button id="playButton" onclick="playTimer()">Play Timer</button>
+        <button id="resetButton" onclick="resetTimer()">Reset Timer</button>
       </div>
       <div class="timer-display" id="timerDisplay">00:00</div>
     </div>
